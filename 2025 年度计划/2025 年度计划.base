@@ -1,0 +1,27 @@
+filters:
+  and:
+    - note["base"] == link("2025 年度计划.base")
+properties:
+  file.name:
+    displayName: 项目名称
+  当前状态:
+    displayName: 当前状态
+  任务说明:
+    displayName: 任务说明
+  时间节点:
+    displayName: 时间节点
+  任务名称:
+    displayName: 任务名称
+views:
+  - type: table
+    name: Table View
+    order:
+      - file.name
+      - 时间节点
+      - 任务说明
+      - 当前状态
+      - 任务名称
+    sort: []
+    columnSize:
+      file.name: 250
+      note.当前状态: 139

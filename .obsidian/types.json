@@ -1,0 +1,16 @@
+{
+  "types": {
+    "aliases": "aliases",
+    "cssclasses": "multitext",
+    "tags": "tags",
+    "当前状态": "multitext",
+    "任务说明": "text",
+    "时间节点": "multitext",
+    "任务名称": "text",
+    "Slug": "text",
+    "LucideIconName": "text",
+    "Description": "text",
+    "Recommend": "checkbox",
+    "Published": "checkbox"
+  }
+}

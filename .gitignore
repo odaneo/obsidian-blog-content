@@ -1,0 +1,16 @@
+# Obsidian 工作区状态（本地窗口布局，不需要版本管理）
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/workspace
+.obsidian/cache
+
+# Obsidian Git 本地设置可能含访问令牌，禁止提交
+.obsidian/plugins/obsidian-git/data.json
+
+# 回收站
+.trash/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini

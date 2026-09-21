@@ -1,0 +1,26 @@
+filters:
+  and:
+    - note["base"] == link("2026 年度计划.base")
+properties:
+  file.name:
+    displayName: 项目名称
+  当前状态:
+    displayName: 当前状态
+  任务说明:
+    displayName: 任务说明
+  时间节点:
+    displayName: 时间节点
+  任务名称:
+    displayName: 任务名称
+views:
+  - type: table
+    name: Table View
+    order:
+      - file.name
+      - 当前状态
+      - 任务说明
+      - 时间节点
+      - 任务名称
+    sort:
+      - property: 当前状态
+        direction: ASC

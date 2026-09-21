@@ -1,0 +1,16 @@
+filters:
+  and:
+    - note["base"] == link("SubTags.base")
+properties:
+  file.name:
+    displayName: Name
+  Slug:
+    displayName: Slug
+views:
+  - type: table
+    name: Table View
+    order:
+      - file.name
+      - Slug
+    columnSize:
+      file.name: 292

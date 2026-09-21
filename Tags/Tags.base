@@ -1,0 +1,27 @@
+filters:
+  and:
+    - note["base"] == link("Tags.base")
+properties:
+  file.name:
+    displayName: Name
+  LucideIconName:
+    displayName: LucideIconName
+  SubTags:
+    displayName: SubTags
+  Description:
+    displayName: Description
+  Slug:
+    displayName: Slug
+  note.SubTags:
+    displayName: SubTags
+views:
+  - type: table
+    name: Table View
+    order:
+      - file.name
+      - LucideIconName
+      - Description
+      - Slug
+    sort: []
+    columnSize:
+      note.Description: 478

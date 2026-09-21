@@ -1,0 +1,39 @@
+filters:
+  and:
+    - Published == true
+properties:
+  file.name:
+    displayName: Name
+  Description:
+    displayName: Description
+  Recommend:
+    displayName: Recommend
+  Slug:
+    displayName: Slug
+  Published:
+    displayName: Published
+  SubTags:
+    displayName: SubTags
+  TagRefs:
+    displayName: TagRefs
+views:
+  - type: table
+    name: Table View
+    order:
+      - file.name
+      - Description
+      - Recommend
+      - Slug
+      - TagRefs
+      - SubTags
+      - Published
+      - MeechoPolished
+    sort:
+      - property: file.name
+        direction: ASC
+      - property: Published
+        direction: ASC
+    columnSize:
+      note.Description: 259
+      note.Recommend: 114
+      note.Slug: 178
