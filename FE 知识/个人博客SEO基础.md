@@ -6,7 +6,7 @@ TagRefs:
 SubTags:
   - "[[SubTags/SEO|SEO]]"
   - "[[SubTags/Nextjs|Nextjs]]"
-Published: true
+Published: false
 Recommend: false
 MeechoPolished: true
 ---

@@ -10,24 +10,24 @@ Recommend: false
 MeechoPolished: true
 ---
 
-EF Core 接口变慢时，先别急着换 ORM。把一次请求执行的 SQL 找出来，通常更容易发现原因：多查了数据、重复访问数据库，或者查询没有合适的索引。
+EF Core接口响应变慢，先看看一次请求到底执行了哪些SQL。常见原因是读取过多数据、反复访问数据库，或缺少适合当前查询的索引。找到这些原因，再选择优化方法。
 
-本文示例使用关系型数据库提供程序；ExecuteUpdateAsync 和 ExecuteDeleteAsync 适用于 EF Core 7 及以上版本，包括 EF Core 8。
+本文使用关系型数据库提供程序。ExecuteUpdateAsync和ExecuteDeleteAsync需要EF Core 7或更高版本，EF Core 8也支持。
 
-## 先看 SQL 和实际耗时
+## 先观察SQL
 
-可以用 ToQueryString 查看查询形状：
+ToQueryString可以查看查询将被翻译成什么SQL：
 
 ```csharp
 var query = db.Users.Where(user => user.IsActive);
 Console.WriteLine(query.ToQueryString());
 ```
 
-再结合 EF Core 日志和数据库执行计划，检查实际执行次数、耗时和扫描数据量。ToQueryString 便于理解翻译结果，但不能替代运行时观测。
+它有助于理解查询，但不会告诉你真实耗时。结合EF Core日志和数据库执行计划，才能确认调用次数、执行时间，以及扫描了多少数据。
 
-## 查询端减少返回的数据
+## 只查询页面所需的数据
 
-列表只展示编号和姓名，就不要读取头像二进制、大段介绍等字段。
+用户列表只展示编号和姓名，就只返回这两个字段，并在数据库中限制数量：
 
 ```csharp
 var users = await db.Users
@@ -38,11 +38,13 @@ var users = await db.Users
     .ToListAsync();
 ```
 
-筛选和限制数量放在数据库查询中完成。提前 ToList 再分页，通常已经把不需要的数据带回来了。
+头像、大段介绍等字段不必随列表返回。筛选和分页也应尽量放在ToList之前，否则应用可能已经取回了大量无用数据。
 
-深分页时，可以在适合“下一页”交互的场景中使用游标方式，例如按唯一 Id 筛选 `Id > lastId`，再排序取下一批。它与任意跳页的需求不同，需要按页面交互选择。[EF Core 高效查询](https://learn.microsoft.com/en-us/ef/core/performance/efficient-querying)
+如果页面只需要不断点击“下一页”，深分页时可以考虑游标方式。例如按唯一Id筛选Id > lastId，排序后取下一批。它与任意跳到某一页的交互不同，应根据页面需求选择。[EF Core高效查询](https://learn.microsoft.com/en-us/ef/core/performance/efficient-querying)
 
-## 只读实体查询可以使用 AsNoTracking
+## 只读实体减少跟踪
+
+默认查询会让DbContext跟踪实体，记录其状态，供后续保存使用。只读页面不需要修改这些实体时，可以使用AsNoTracking：
 
 ```csharp
 var users = await db.Users
@@ -52,19 +54,19 @@ var users = await db.Users
     .ToListAsync();
 ```
 
-默认跟踪查询会让 DbContext 记录实体状态，便于后续保存修改。只读页面不需要这种能力时，无跟踪查询可以减少相应开销。
+省去跟踪可以减少相关开销，但收益仍取决于结果数量和实体重复情况。
 
-如果投影只返回字符串、数字等值，没有包含实体，本来就不会跟踪实体。反过来，需要修改并调用 SaveChanges 的对象，保留跟踪往往更方便。无跟踪也不是所有查询都必然更快，要看结果规模和实体重复情况。[跟踪与无跟踪查询](https://learn.microsoft.com/en-us/ef/core/querying/tracking)
+如果Select仅返回字符串、数字等值，没有包含实体，就没有实体需要跟踪。需要修改对象并调用SaveChanges时，保留跟踪则更方便。[跟踪查询与无跟踪查询](https://learn.microsoft.com/en-us/ef/core/querying/tracking)
 
-## 关联数据，避免循环里反复查询
+## 避免逐条查询关联数据
 
-先查订单，再为每张订单查明细，很容易形成 N+1。只需要数量或金额时使用 Select 投影，需要完整关联实体时再考虑 Include。
+先取订单，再为每张订单单独查明细，容易产生N+1查询。页面只要数量或金额时，用Select投影；确实需要关联实体时，再使用Include。
 
-加载多个集合，还要评估联表产生的重复数据。具体例子见 [[EF Core N+1 查询问题]]，不必把所有关联都堆进一条 SQL。
+一次加载多个集合可能让联表结果出现大量重复数据，也要结合实际SQL评估。例子见[[EF Core N+1 查询问题]]。
 
-## 写入端使用合适的批量操作
+## 成批更新和删除
 
-如果要将符合条件的用户统一停用，可以让数据库直接更新：
+统一停用长期未登录的用户，可以直接让数据库更新符合条件的记录：
 
 ```csharp
 var cutoff = DateTime.UtcNow.AddYears(-2);
@@ -75,15 +77,17 @@ var affected = await db.Users
         setters.SetProperty(user => user.IsActive, false));
 ```
 
-这类操作不需要先加载全部实体。删除符合条件的数据，则有 ExecuteDeleteAsync。
+ExecuteUpdateAsync无需先读取全部实体；成批删除则可以使用ExecuteDeleteAsync。
 
-它们执行后立即生效，不等待 SaveChanges，也不会同步修改当前 DbContext 中已经跟踪的对象。多个调用需要一起成功或失败时，要显式使用事务；并发令牌也不会自动套用，需要自行增加条件并检查影响行数。[批量更新与删除](https://learn.microsoft.com/en-us/ef/core/saving/execute-insert-update-delete)
+这两种操作会立即执行，不经过SaveChanges，当前DbContext中已跟踪的实体也不会自动跟着更新。多个调用要作为一个整体提交时，需要显式事务。
 
-批量插入又是另一类需求。大量导入可以评估数据库专用导入能力，不能把 ExecuteUpdate 当成统一解决所有批处理的接口。
+并发令牌不会自动参与这类更新。若业务需要版本检查，应自行添加筛选条件，并核对影响行数。[EF Core批量更新与删除](https://learn.microsoft.com/en-us/ef/core/saving/execute-insert-update-delete)
 
-## 按业务单元提交SaveChanges
+大量插入属于另一种操作，可以评估数据库的专用导入功能。ExecuteUpdate并不能承担所有批处理需求。
 
-不要每改一个对象就提交一次：
+## 同一业务操作集中保存
+
+已经加载并跟踪的实体，可以先完成修改，再统一提交：
 
 ```csharp
 foreach (var user in usersToUpdate)
@@ -94,13 +98,13 @@ foreach (var user in usersToUpdate)
 await db.SaveChangesAsync();
 ```
 
-这里假设 usersToUpdate 是已跟踪的实体。一次 SaveChanges 可以提交这一组修改，但并不代表一定只有一条 SQL。在支持事务的提供程序中，默认会让这次保存中的修改一起成功或失败。[EF Core 事务说明](https://learn.microsoft.com/en-us/ef/core/saving/transactions)
+这样避免每改一个对象就调用一次SaveChanges。一次保存仍可能执行多条SQL；提供程序支持事务时，默认会将本次保存中的修改作为一个整体提交或回滚。[EF Core事务](https://learn.microsoft.com/en-us/ef/core/saving/transactions)
 
-也不要把无限多实体积累到同一个 DbContext。大批量工作需要在事务要求、内存占用和批次大小之间取舍。
+大批量任务也不能无限积累实体。需要根据事务边界、内存占用和数据量，选择合适的批次。
 
-## 索引要匹配真正的查询
+## 索引围绕实际查询设计
 
-可以在模型中声明索引，再通过迁移落实到数据库：
+模型中可以声明索引，再通过迁移应用到数据库：
 
 ```csharp
 modelBuilder.Entity<User>()
@@ -108,6 +112,6 @@ modelBuilder.Entity<User>()
     .IsUnique();
 ```
 
-唯一索引首先表达“邮箱不能重复”的约束。普通查询索引则要结合过滤、排序和关联方式设计，并看执行计划是否受益。
+这里的唯一索引同时约束邮箱不得重复，是一条业务规则。
 
-索引也会增加写入和存储成本，不是每个 Where 字段都应该单独建一个。
+用于加速查询的索引，则要根据过滤、排序和关联条件设计，再用执行计划确认效果。索引会占用空间并增加写入成本，不宜给每个Where字段都单独建一个。

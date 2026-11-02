@@ -1,14 +1,4 @@
----
-Description: 系统总结 LeetCode 刷题过程中常见的 C# 语法错误与易混淆点，涵盖数组、List、Dictionary、字符串、循环、堆、字典转列表、接口与实现等高频踩坑场景。每一条都来自真实代码，适合正在用 C# 准备算法面试或刷题的开发者随时查阅。
-Slug: csharp-leetcode-syntax-pitfalls-guide
-TagRefs:
-  - "[[后端]]"
-SubTags:
-  - "[[CSharp|CSharp]]"
-Published: false
-Recommend: false
-MeechoPolished: false
----
+
 ## 1. 数组（Array）
 
 - **声明与初始化**

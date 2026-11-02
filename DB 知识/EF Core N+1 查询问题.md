@@ -10,30 +10,28 @@ Recommend: false
 MeechoPolished: true
 ---
 
-N+1 问题就是：先查一次列表，再为列表中的每条记录各查一次关联数据，导致数据库被反复访问。
+先查询一份部门列表，再逐个部门查询员工，就会形成N+1：列表查询占1次，N个部门的员工查询再占N次。
 
-## 一个例子就能看明白
+## 查询次数怎样增加
 
-假设数据库里有两张表：
+数据库包含部门和员工两张表。
 
-Departments 部门表：
+Departments部门表：
 
-|Id|Name|
-|---|---|
-|1|技术部|
-|2|财务部|
+| Id | Name |
+| --- | --- |
+| 1 | 技术部 |
+| 2 | 财务部 |
 
-Employees 员工表：
+Employees员工表：
 
-|Id|Name|DepartmentId|
-|---|---|---|
-|101|小王|1|
-|102|小李|1|
-|103|小张|2|
+| Id | Name | DepartmentId |
+| --- | --- | --- |
+| 101 | 小王 | 1 |
+| 102 | 小李 | 1 |
+| 103 | 小张 | 2 |
 
-员工通过 `DepartmentId` 表示自己属于哪个部门。
-
-现在需要展示部门和员工：
+DepartmentId记录员工的所属部门。若展示页面这样读取数据：
 
 ```csharp
 // 先查部门：1 次
@@ -48,13 +46,11 @@ foreach (var department in departments)
 }
 ```
 
-如果有 10 个部门，就是 1 + 10 = 11 次查询；有 100 个部门，就是 101 次。
+10个部门要执行11次查询，100个部门则是101次。每次访问都有数据库往返的等待，查询数量随列表长度增长，接口耗时也容易随之增加。[EF Core高效查询](https://learn.microsoft.com/en-us/ef/core/performance/efficient-querying)
 
-每次查询都要等待数据库返回。次数一多，接口就容易变慢。[EF Core 对 N+1 的说明](https://learn.microsoft.com/en-us/ef/core/performance/efficient-querying)
+## 员工明细一起加载
 
-## 需要员工明细就一起加载
-
-用 Include 提前加载部门对应的员工：
+页面需要员工列表时，可以用Include提前取回关联数据：
 
 ```csharp
 var departments = await db.Departments
@@ -71,13 +67,13 @@ foreach (var department in departments)
 }
 ```
 
-在默认单查询模式下，这个简单例子通常通过一条联表 SQL 取回数据，避免每个部门再查一次。
+循环只读取已加载的员工，无需再向数据库查询。
 
-如果配置了拆分查询，Include 也可能执行多条 SQL，但不等于每个部门都单独查询一次。[单查询与拆分查询](https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries)
+默认单查询模式下，这个简单关联通常由一条联表SQL完成。配置拆分查询后，Include可能执行多条SQL，但查询方式仍不同于为每个部门各发一次请求。[单查询和拆分查询](https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries)
 
-## 只需要人数就直接统计
+## 人数交给数据库统计
 
-页面只展示部门名和人数时，不必把所有员工都读出来：
+页面若只显示部门名和员工数量，就没有必要加载员工明细：
 
 ```csharp
 var rows = await db.Departments
@@ -89,6 +85,6 @@ var rows = await db.Departments
     .ToListAsync();
 ```
 
-这里的统计放在查询表达式中，由 EF Core 翻译后交给数据库执行。
+Count位于查询表达式中，EF Core会把统计翻译成SQL，数据库返回部门名和人数即可。
 
-排查 N+1 时，可以先看循环里有没有数据库查询。若启用了延迟加载，访问尚未加载的导航属性也可能触发查询，需要一起检查。
+排查时，先检查循环内部的数据库调用。启用延迟加载后，读取未加载的导航属性也可能发起查询，日志中同样需要留意这类访问。

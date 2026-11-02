@@ -24,4 +24,5 @@ views:
       - Slug
     sort: []
     columnSize:
+      file.name: 131
       note.Description: 478

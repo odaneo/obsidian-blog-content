@@ -1,14 +1,4 @@
----
-Description: 一文掌握 crontab 定时规则：详述从“每分钟”到“每月 1 号”的各种复杂表达式写法。包含详细的字段含义解析、步长设置技巧以及 Linux 系统中 cron 任务的配置规范，是运维人员与开发者的必备便携手册。
-Slug: crontab-cheatsheet
-TagRefs:
-  - "[[Tags/其他|其他]]"
-SubTags:
-  - "[[SubTags/Linux|Linux]]"
-Published: false
-Recommend: false
-MeechoPolished: false
----
+
 ## 时间格式（5 字段）
 
 ```plain text

@@ -6,7 +6,7 @@ TagRefs:
 SubTags:
   - "[[SubTags/JavaScript|JavaScript]]"
 Published: true
-Recommend: false
+Recommend: true
 MeechoPolished: false
 ---
 在把 React Native 从 0.71 升级到 0.76 的过程中，`react-native-snap-carousel` 这个库因为长期无人维护（版本停留在 5 年前），导致运行时出现了错误：

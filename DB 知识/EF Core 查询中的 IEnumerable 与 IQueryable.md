@@ -10,7 +10,9 @@ Recommend: false
 MeechoPolished: true
 ---
 
-假设数据库里有一张Users表：
+同样一段Where，既可能由数据库筛选，也可能由C#逐条判断。在EF Core查询中，IQueryable和IEnumerable的区别，首先体现在数据在哪里处理。
+
+假设Users表有三名用户：
 
 | Id | Name | Age |
 | --- | --- | --- |
@@ -18,11 +20,9 @@ MeechoPolished: true
 | 2 | 小李 | 20 |
 | 3 | 小张 | 25 |
 
-现在只想查出成年人，也就是Age大于或等于18的用户。
+我们要查询Age大于或等于18的成年人。下面两种写法都会留下小李和小张，但从数据库取回的数据量不同。
 
-下面两段代码都能得到小李和小张，但筛选的位置不同。这里讨论的是EF Core查询数据库的用法。
-
-## IQueryable在数据库中筛选
+## IQueryable交给数据库筛选
 
 ```csharp
 IQueryable<User> users = db.Users;
@@ -32,11 +32,9 @@ var adults = users
     .ToList();
 ```
 
-这里的User是表示用户的C#类，包含Id、Name、Age等属性。
+User是对应用户记录的C#类，包含Id、Name和Age等属性。
 
-users使用IQueryable类型，后面的Where条件可以交给EF Core翻译成SQL，让数据库执行。
-
-过程是：
+users声明为IQueryable，Where便可以进入查询表达式。EF Core将这里的年龄条件翻译为SQL，由数据库完成筛选。
 
 ```text
 告诉数据库：只要年龄大于或等于18的用户
@@ -46,11 +44,11 @@ users使用IQueryable类型，后面的Where条件可以交给EF Core翻译成SQ
 应用收到2条记录
 ```
 
-小王不满足条件，因此不会作为查询结果传给应用。
+应用只收到符合条件的2条记录，小王的数据不会传回来。
 
-## IEnumerable在C#中筛选
+## IEnumerable交给C#筛选
 
-把第一行的类型换成IEnumerable：
+只改第一行的接口类型：
 
 ```csharp
 IEnumerable<User> users = db.Users;
@@ -60,9 +58,7 @@ var adults = users
     .ToList();
 ```
 
-这时，后面的Where使用C#的集合筛选方法，不会把年龄条件加进数据库查询。
-
-过程变成：
+此时调用的是Enumerable的Where方法。年龄判断在C#中执行，不会加入这次数据库查询。
 
 ```text
 数据库返回小王、小李、小张
@@ -72,22 +68,22 @@ C#检查每个人的年龄
 留下小李、小张
 ```
 
-结果仍然是2个人，但3条记录都需要从数据库传过来。
+最终仍是2人，但应用先接收了3人的数据。
 
-如果表里有10万名用户，其中只有100人符合条件，区别就更明显：
+表中若有10万名用户，仅100人符合条件，这个差距就会放大：
 
-| 写法 | 在哪里判断年龄 | 需要从数据库传回多少条记录 |
+| 示例 | 执行年龄判断的位置 | 数据库返回的记录数 |
 | --- | --- | --- |
-| IQueryable示例 | 数据库 | 100条 |
-| IEnumerable示例 | C#程序 | 10万条 |
+| IQueryable | 数据库 | 100条 |
+| IEnumerable | C#应用 | 10万条 |
 
-IEnumerable不代表数据已经在内存里。上面的users仍然来自数据库，只是年龄筛选改由C#完成。[EF Core客户端求值说明](https://learn.microsoft.com/en-us/ef/core/querying/client-eval)
+声明为IEnumerable，并不表示数据已经加载到内存。这个例子的查询源仍是db.Users，只是后续年龄筛选留在了应用端。[EF Core客户端求值](https://learn.microsoft.com/en-us/ef/core/querying/client-eval)
 
-## ToList执行查询
+## ToList才取回结果
 
-在这两个例子中，第一行赋值时都还没有查询数据库。执行到ToList时，才会取出数据，并把最终结果保存为列表。
+两段代码在第一行赋值时都没有访问数据库。执行ToList后，查询才被枚举，最终结果收集为列表。
 
-代码里也经常不明确写出接口类型，而是直接这样查询：
+日常代码通常省略接口声明，直接写成：
 
 ```csharp
 var adults = await db.Users
@@ -95,4 +91,4 @@ var adults = await db.Users
     .ToListAsync();
 ```
 
-这里的年龄条件仍然交给数据库处理，查询完成后，adults才是一份可以在C#中使用的结果列表。
+年龄条件仍由数据库执行。ToListAsync完成后，adults才是应用可以使用的结果列表。
