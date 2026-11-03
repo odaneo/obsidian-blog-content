@@ -1,10 +1,11 @@
 ---
+Id: "f639a2218e52447a9cb05ff593d7751d"
 Description: 用部门和员工的例子，快速理解 Cascade、SetNull、Restrict 的删除结果，以及 SetNull 与 ClientSetNull 的区别。
 Slug: ef-core-relationship-delete-behaviors
 TagRefs:
   - "[[Tags/数据库|数据库]]"
 SubTags:
-  - "[[EFCore]]"
+  - "[[SubTags/EFCore|EFCore]]"
 Published: false
 Recommend: false
 MeechoPolished: true

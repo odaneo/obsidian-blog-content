@@ -1,4 +1,5 @@
 ---
+Id: "0178b39a481244e4a1eae983069663f1"
 Description: 从组件边界、服务端渲染和缓存配置出发，讨论Next.js App Router带来的收益与开发成本，说明它为什么让我觉得越来越难用。
 Slug: nextjs-app-router-struggle
 TagRefs:

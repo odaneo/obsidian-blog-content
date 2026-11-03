@@ -1,10 +1,11 @@
 ---
+Id: 216015c61ccc42fc83e64f3702da2024
 Description: 用简短的文件日志示例，说明谁调用 Dispose、using 在何时调用，以及开发者、DI 容器和 GC 分别负责什么。
 Slug: csharp-idisposable-dispose-beginners-guide
 TagRefs:
-  - "[[后端]]"
+  - "[[Tags/后端|后端]]"
 SubTags:
-  - "[[CSharp|CSharp]]"
+  - "[[SubTags/CSharp|CSharp]]"
 Published: true
 Recommend: false
 MeechoPolished: true

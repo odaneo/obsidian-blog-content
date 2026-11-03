@@ -1,4 +1,5 @@
 ---
+Id: "d4b9d41090e74d1b9dfd718fd3ebab3b"
 Description: 用订单写入和误删的例子，讲清PostgreSQL同步复制、WAL归档与pgBackRest时间点恢复，并比较PostgreSQL和Oracle两台、三台部署与RPO=0的关系。
 Slug: postgresql-ha-pgbackrest-point-in-time-recovery
 TagRefs:

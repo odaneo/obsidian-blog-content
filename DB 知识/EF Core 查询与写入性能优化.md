@@ -1,10 +1,11 @@
 ---
+Id: "ac97302f7873443393a0512f64e8baf3"
 Description: 从 SQL、返回数据量和数据库往返入手，介绍 EF Core 的投影、无跟踪查询、分页、批量更新与索引优化，分清哪些优化需要结合实际负载验证。
 Slug: ef-core-query-and-write-performance
 TagRefs:
   - "[[Tags/数据库|数据库]]"
 SubTags:
-  - "[[EFCore]]"
+  - "[[SubTags/EFCore|EFCore]]"
 Published: false
 Recommend: false
 MeechoPolished: true

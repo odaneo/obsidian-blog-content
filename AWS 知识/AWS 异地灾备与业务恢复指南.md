@@ -1,4 +1,5 @@
 ---
+Id: "cca96fbf06bd412b8737f9214305a1c6"
 Description: 以 1 小时 RTO、15 分钟 RPO 为例，从数据、网络、服务和恢复流程讲解 AWS 异地灾备。用自行部署的 PostgreSQL、Oracle 说明数据库恢复，并结合 S3、Route 53、ALB 和 EC2 介绍业务接管。
 Slug: aws-cross-region-disaster-recovery
 TagRefs:

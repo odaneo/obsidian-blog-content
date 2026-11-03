@@ -1,10 +1,11 @@
 ---
+Id: "0738a0d82ffd4066bc65860a74847c4e"
 Description: 结合工具调用示例和流程图，讲清Context7如何解析库ID、检索文档，并把结果提供给AI。进一步说明文档索引、版本选择、本地与远程连接、刷新机制及常见问题，理解MCP和检索增强在这条链路中的分工。
 Slug: context7-mcp-workflow
 TagRefs:
   - "[[Tags/AI|AI]]"
 SubTags:
-  - "[[MCP]]"
+  - "[[SubTags/MCP|MCP]]"
 Published: true
 Recommend: false
 MeechoPolished: true

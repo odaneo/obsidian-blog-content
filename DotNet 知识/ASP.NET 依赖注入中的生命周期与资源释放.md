@@ -1,10 +1,11 @@
 ---
+Id: "371411c674894ad99f4c48611476c749"
 Description: 用生命周期对照表和作用域示例，说明 Singleton、Scoped、Transient 的区别，以及 using、DI 容器和开发者各自负责的资源释放。
 Slug: aspnet-core-di-lifetime-and-dispose-guide
 TagRefs:
-  - "[[后端]]"
+  - "[[Tags/后端|后端]]"
 SubTags:
-  - "[[CSharp|CSharp]]"
+  - "[[SubTags/CSharp|CSharp]]"
 Published: true
 Recommend: false
 MeechoPolished: true

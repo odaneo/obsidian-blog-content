@@ -1,10 +1,11 @@
 ---
+Id: "fbb23823150d4097beb884d226f19d28"
 Description: 通过库存查询的Controller示例，理解SemaphoreSlim的并发限制、许可归还、异步互斥和单实例边界。
 Slug: aspnet-core-semaphoreslim-concurrency
 TagRefs:
-  - "[[后端]]"
+  - "[[Tags/后端|后端]]"
 SubTags:
-  - "[[CSharp|CSharp]]"
+  - "[[SubTags/CSharp|CSharp]]"
 Published: true
 Recommend: false
 MeechoPolished: true

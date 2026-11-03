@@ -1,10 +1,11 @@
 ---
+Id: "ee10b4b2ff694af8b9607fcb9cf5ed96"
 Description: 以电商客服为例，说明AI Agent怎样审核输入、检查工具权限和审核回答。结合越权查订单、要求运行代码等场景，理解审核模型与后端代码各自负责什么。
 Slug: ai-agent-safety-basics
 TagRefs:
   - "[[Tags/AI|AI]]"
-  - "[[安全]]"
-SubTags:
+  - "[[Tags/安全|安全]]"
+SubTags: []
 Published: true
 Recommend: false
 MeechoPolished: true

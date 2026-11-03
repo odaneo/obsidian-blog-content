@@ -1,4 +1,5 @@
 ---
+Id: "b451bb81519f4557a48b79b2b2157a41"
 Description: 用请求访问与域名解析两个流程，讲清 CloudFront 源站故障转移和 Route 53 健康检查的区别。对比触发方式、缓存影响、切换时间与适用场景，帮助你理解主服务故障后，备用服务怎样接上。
 Slug: cloudfront-origin-failover-vs-route53-health-checks
 TagRefs:

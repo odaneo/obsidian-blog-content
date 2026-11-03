@@ -1,4 +1,5 @@
 ---
+Id: "7eab95d2b7d246669f8f72e2078188cd"
 Description: 从标题、页面描述、规范地址、结构化数据和站点地图入手，说明个人博客怎样让搜索引擎更容易发现和理解文章。
 Slug: engineering-seo-guidelines
 TagRefs:

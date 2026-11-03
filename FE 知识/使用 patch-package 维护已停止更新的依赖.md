@@ -1,4 +1,5 @@
 ---
+Id: "75791d2202f04588979757b40435356e"
 Description: 前端进阶指南：利用 patch-package 维护过时依赖。以修复 React Native 组件库为例，详解从修改 node_modules 到自动应用补丁的全流程，确保旧包在现代开发环境中依然稳定运行。
 Slug: patch-stale-deps
 TagRefs:

@@ -1,8 +1,9 @@
 ---
+Id: "4983050adb4d43e8880e0e479091187f"
 Description: 用查询用户名的例子解释SQL注入，再用EF Core演示参数化查询，简单说明输入拼接为什么危险以及如何防护。
 Slug: sql-injection-prevention
 TagRefs:
-  - "[[安全]]"
+  - "[[Tags/安全|安全]]"
 SubTags:
   - "[[SubTags/Web攻击|Web攻击]]"
 Published: false

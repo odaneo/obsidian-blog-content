@@ -1,10 +1,11 @@
 ---
+Id: "85af516dd9cc485dab73f9b9d750ec8f"
 Description: 从异步与多线程的区别讲起，用代码说明 C# 如何执行并发任务、保护共享数据、限制并发量，以及处理取消、异常和后端服务中的并发问题。
 Slug: csharp-multithreading-and-concurrency-guide
 TagRefs:
-  - "[[后端]]"
+  - "[[Tags/后端|后端]]"
 SubTags:
-  - "[[CSharp|CSharp]]"
+  - "[[SubTags/CSharp|CSharp]]"
 Published: true
 Recommend: false
 MeechoPolished: true

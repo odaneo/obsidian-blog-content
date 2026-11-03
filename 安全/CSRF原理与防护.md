@@ -1,8 +1,9 @@
 ---
+Id: "519622047f624a4da65df2622aa54d05"
 Description: 用已登录用户被诱导提交请求的例子解释CSRF，说明防伪令牌、SameSite和Authorization请求头各能解决什么问题。
 Slug: csrf-attack-and-prevention
 TagRefs:
-  - "[[安全]]"
+  - "[[Tags/安全|安全]]"
 SubTags:
   - "[[SubTags/Web攻击|Web攻击]]"
 Published: false

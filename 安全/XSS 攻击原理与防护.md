@@ -1,8 +1,9 @@
 ---
+Id: "5206cb76bf8548159027ef9115f5371a"
 Description: 用评论区的例子解释XSS，说明普通文字、富文本和链接该怎样处理，以及CSP能提供哪些额外保护。
 Slug: xss-attack-and-prevention
 TagRefs:
-  - "[[安全]]"
+  - "[[Tags/安全|安全]]"
 SubTags:
   - "[[SubTags/Web攻击|Web攻击]]"
 Published: false

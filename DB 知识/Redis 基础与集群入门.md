@@ -1,4 +1,5 @@
 ---
+Id: "6d8446d513034eda8750f65d42f5c159"
 Description: 用商品查询和改价的例子，讲清Redis缓存穿透、击穿、雪崩与延迟双删，再梳理持久化、主从复制、Sentinel高可用和Cluster分片。
 Slug: redis-basics-and-cluster
 TagRefs:

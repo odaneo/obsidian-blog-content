@@ -1,4 +1,5 @@
 ---
+Id: "71b900d0a9b74cc2b11035f0123dd230"
 Description: 用两个人同时修改商品价格的例子，解释乐观锁如何通过版本号发现冲突，再演示EF Core的配置、保存和网页编辑处理。
 Slug: optimistic-concurrency-with-ef-core
 TagRefs:

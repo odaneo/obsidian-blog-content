@@ -1,10 +1,11 @@
 ---
+Id: "78d7e4f9eadf48c8b10cc2c76626f960"
 Description: 用部门和员工的例子，简单解释 EF Core N+1 查询问题，以及怎样通过 Include 加载明细、通过 Select 统计人数，减少重复查询。
 Slug: ef-core-n-plus-one-queries
 TagRefs:
   - "[[Tags/数据库|数据库]]"
 SubTags:
-  - "[[EFCore]]"
+  - "[[SubTags/EFCore|EFCore]]"
 Published: false
 Recommend: false
 MeechoPolished: true

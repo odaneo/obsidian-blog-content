@@ -1,10 +1,11 @@
 ---
+Id: "8483976ff1f04ea68adabf3305951437"
 Description: 以库存查询为例，说明.NET线程池如何复用线程、异步方法如何在await后恢复执行，并区分异步状态机、ExecutionContext与SynchronizationContext的作用。
 Slug: dotnet-thread-pool-async-resumption
 TagRefs:
   - "[[Tags/后端|后端]]"
 SubTags:
-  - "[[CSharp]]"
+  - "[[SubTags/CSharp|CSharp]]"
 Published: true
 Recommend: false
 MeechoPolished: true

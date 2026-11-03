@@ -1,4 +1,5 @@
 ---
+Id: "b94f9c088c1f4dc3ae6d8efb6971508a"
 Description: 讲清 AWS VPC、子网、路由表、Internet Gateway、NAT Gateway、安全组与 NACL 的分工。结合公网访问和私网出站的例子，理解流量怎样找到目的地，以及哪些规则决定能否通过。
 Slug: aws-vpc-networking-basics
 TagRefs:

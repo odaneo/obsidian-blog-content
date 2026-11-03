@@ -1,4 +1,5 @@
 ---
+Id: "b86c382ba39544359883204f3c812dc0"
 Description: 掌握 Git 在实际开发中的高频应用场景。本指南涵盖了从基础暂存、提交到复杂的分支管理、冲突解决及版本回退等实用技巧，帮助开发者提升协作效率并从容应对各种版本控制挑战。
 Slug: git-practical-scenarios
 TagRefs:

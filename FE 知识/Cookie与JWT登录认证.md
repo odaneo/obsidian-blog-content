@@ -1,11 +1,12 @@
 ---
+Id: 787aeea32ee742d492a5b55eb063e8b7
 Description: 从一次登录讲起，区分Cookie、Session和JWT，再用连续流程解释双Token刷新、强制下线和Okta单点登录。
 Slug: jwt-session-best-practices
 TagRefs:
   - "[[Tags/前端|前端]]"
 SubTags:
   - "[[SubTags/JWT|JWT]]"
-  - "[[Session]]"
+  - "[[SubTags/Session|Session]]"
 Published: true
 Recommend: false
 MeechoPolished: true

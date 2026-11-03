@@ -1,4 +1,5 @@
 ---
+Id: "3f66b54829e04d60b2d50e1e949c04a7"
 Description: 以制造企业ERP为例，对比数据开发、故障排查、经营分析和数据质量管理的传统做法与AI方式，说明Databricks on AWS中四种AI应用的处理过程、实际价值和实现条件。
 Slug: databricks-aws-ai-erp-scenarios
 TagRefs:
@@ -6,8 +7,8 @@ TagRefs:
   - "[[Tags/Databricks|Databricks]]"
   - "[[Tags/AWS|AWS]]"
 SubTags:
-  - "[[Databricks SQL]]"
-  - "[[RAG]]"
+  - "[[SubTags/Databricks SQL|Databricks SQL]]"
+  - "[[SubTags/RAG|RAG]]"
 Published: true
 Recommend: true
 MeechoPolished: true

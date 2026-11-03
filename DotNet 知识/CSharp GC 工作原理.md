@@ -1,10 +1,11 @@
 ---
+Id: "6443e8b788ed49c2bb0994673189802f"
 Description: 用简单的引用示例，说明 GC 如何寻找存活对象、回收内存，以及分代回收和大对象堆的基本含义。
 Slug: csharp-gc-basics
 TagRefs:
-  - "[[后端]]"
+  - "[[Tags/后端|后端]]"
 SubTags:
-  - "[[CSharp|CSharp]]"
+  - "[[SubTags/CSharp|CSharp]]"
 Published: true
 Recommend: false
 MeechoPolished: true
