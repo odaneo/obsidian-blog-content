@@ -1,0 +1,43 @@
+name: Sync published blog
+
+on:
+  push:
+    branches: [main]
+    paths: ['**/*.md', '.github/scripts/**', '.github/workflows/sync-blog.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: published-blog-production
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  sync:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: .github/scripts/package-lock.json
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+        working-directory: .github/scripts
+      - run: npm test
+        working-directory: .github/scripts
+      - name: Build complete published snapshot
+        run: node .github/scripts/build-snapshot.cjs --output "$RUNNER_TEMP/blog-snapshot.json"
+      - name: Apply snapshot and refresh caches
+        env:
+          SYNC_API_URL: ${{ secrets.SYNC_API_URL }}
+          SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
+        run: node .github/scripts/send-snapshot.cjs "$RUNNER_TEMP/blog-snapshot.json"

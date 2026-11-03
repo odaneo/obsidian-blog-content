@@ -1,0 +1,6 @@
+{
+  "name": "obsidian-blog-sync",
+  "private": true,
+  "scripts": { "test": "node --test" },
+  "dependencies": { "yaml": "2.8.3" }
+}
