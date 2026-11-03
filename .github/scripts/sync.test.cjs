@@ -93,3 +93,26 @@ test('unauthorized requests do not retry and plain HTTP is refused', async t => 
   assert.equal(calls, 1);
   await assert.rejects(send(file, 'http://example.invalid', 'x'.repeat(48), fetcher), /HTTPS/);
 });
+
+test('403 diagnostics report the response source without logging URL, token or response body', async t => {
+  const f = fixture(t); const file = path.join(f.root, 'snapshot.json'); fs.writeFileSync(file, '{}');
+  const token = 'sensitive-token-'.repeat(4);
+  const endpoint = 'https://private.example.invalid/api/sync/obsidian';
+  let calls = 0;
+  await assert.rejects(send(file, endpoint, token, async () => {
+    calls++;
+    return new Response('<html>PRIVATE RESPONSE ' + endpoint + ' ' + token + '</html>', {
+      status: 403, headers: { server: 'cloudflare', 'content-type': 'text/html', 'cf-ray': 'example-ray', 'cf-mitigated': 'challenge' }
+    });
+  }), error => {
+    assert.match(error.message, /HTTP 403/);
+    assert.equal(error.diagnostics.cfRay, 'example-ray');
+    assert.equal(error.diagnostics.responseKind, 'challenge');
+    assert.equal(error.diagnostics.server, 'cloudflare');
+    assert.equal(error.diagnostics.requestBytes, 2);
+    const log = JSON.stringify({ error: error.message, ...error.diagnostics });
+    for (const secret of [endpoint, token, 'PRIVATE RESPONSE']) assert(!log.includes(secret));
+    return true;
+  });
+  assert.equal(calls, 1);
+});
