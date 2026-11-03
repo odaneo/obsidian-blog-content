@@ -22,5 +22,7 @@ views:
       - 时间节点
       - 任务名称
     sort:
+      - property: file.name
+        direction: ASC
       - property: 当前状态
         direction: ASC
