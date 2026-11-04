@@ -4,7 +4,11 @@ const { execFileSync } = require('node:child_process');
 const YAML = require('yaml');
 
 function git(root, ...args) {
-  return execFileSync('git', ['-C', root, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+  try {
+    return execFileSync('git', ['-C', root, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+  } catch (error) {
+    throw new Error(`${error.message}\nGit process: exit=${error.status ?? 'none'}, signal=${error.signal ?? 'none'}, code=${error.code ?? 'none'}`, { cause: error });
+  }
 }
 
 function frontmatter(text) {

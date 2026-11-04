@@ -23,6 +23,16 @@ function fixture(t) {
   return { root, write, commit };
 }
 
+test('Git failures retain the original error and include process exit diagnostics', t => {
+  const f = fixture(t);
+  assert.throws(() => buildSnapshot(f.root, 'test/content', 1), error => {
+    assert.match(error.message, /fatal:/);
+    assert.match(error.message, /Git process: exit=128, signal=none, code=none/);
+    assert.equal(error.cause.status, 128);
+    return true;
+  });
+});
+
 test('only boolean Published true notes and category metadata enter the package', t => {
   const f = fixture(t);
   f.write('知识/文章.md', '---\nId: "11111111111141118111111111111111"\nPublished: true\nSlug: article\nTagRefs:\n  - "[[后端]]"\n---\n# Published body');
