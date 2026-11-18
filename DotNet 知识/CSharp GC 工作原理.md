@@ -129,7 +129,7 @@ GC仍然可以沿着这条引用链找到Person，所以即使这时发生了GC�
 
 执行`PersonCache.Instance.Current = null`，才断开了单例对这个Person的引用。如果没有其他有效引用，Person就具备被回收的条件；何时真正回收，仍由GC决定。PersonCache单例本身仍由静态字段Instance引用，不会因为清空Current而一起消失。
 
-决定对象能否被回收的是引用链。单例只是常见的长期持有者，并不是所有曾经被单例使用过的对象都会一直存活。[Microsoft：GC Root与可达对象](https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/fundamentals#memory-release)
+决定对象能否被回收的是引用链。单例只是常见的长期持有者，并不是所有曾经被单例使用过的对象都会一直存活。
 
 如果单例里的List或Dictionary不断添加数据，又没有删除或过期策略，旧数据就可能一直被保留。业务已经不再需要这些对象，但仍有引用让它们存活，就可能形成托管内存泄漏。DI容器中的Singleton服务也需要注意这种长期持有数据的情况。[Microsoft：单例对内存的影响](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection/guidelines)
 

@@ -79,20 +79,9 @@ WaitAsync放在try之前，避免等待已取消、根本没有取得许可时�
 
 ### 一个许可实现异步互斥
 
-如果本实例的缓存刷新任务需要逐个执行，下面的lock写法无法编译：
+将许可数量设为1，就能实现异步互斥。下面用它控制库存刷新，`RefreshStockAsync`表示已有且支持取消的异步刷新方法：
 
-```csharp
-lock (_gate)
-{
-    await RefreshStockAsync(sku);
-}
-```
-
-C#禁止在lock语句块里写await。普通锁与持有它的线程相关，异步恢复却不保证仍由该线程执行。[官方lock说明](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/lock)
-
-可以共享一个许可。下面是刷新服务的方法片段，RefreshStockAsync表示已有的异步刷新逻辑，并支持取消：
-
-```csharp
+```C#
 private static readonly SemaphoreSlim RefreshGate = new(1, 1);
 
 public async Task RefreshAsync(string sku, CancellationToken token)
@@ -110,16 +99,15 @@ public async Task RefreshAsync(string sku, CancellationToken token)
 }
 ```
 
-这里的`WaitAsync(token)`会异步等待名额，不会像前面那样立即拒绝。第一项刷新等待数据库时仍占着许可，后续任务必须等它Release后才有机会进入。
+`WaitAsync(token)`会在没有许可时异步等待。当前刷新在等待数据库期间仍占用许可，后续任务要等它调用`Release()`后才能进入。
 
-await使线程能够离开当前执行流程，不会替代码归还信号量许可。SemaphoreSlim也不要求取得、归还许可的是同一条线程。
+异步等待可以让出线程，但不会自动归还许可。`SemaphoreSlim`不要求由同一条线程取得和归还许可，因此可以跨`await`使用。
 
-## 使用边界
+`lock`则与持有锁的线程绑定，而异步恢复时可能换一条线程。因此，C#不允许在`lock`中使用`await`，下面的写法无法编译：
 
-- 并发数控制同时在途的操作，不等于每秒请求数。需要按时间限制请求量时，可选择固定窗口、滑动窗口或令牌桶。
-- static字段只在本进程共享。三个实例各有两个许可，合计可能进入六个操作。全局额度需要在共享层控制，例如API网关。
-- 示例保护的是Action中的查询逻辑，MVC后续的结果序列化和响应发送在其范围之外。
-- 库存预占的正确性仍由数据库保证。限制并发数量不能代替库存充足才扣减的原子更新。
-
-ASP.NET Core内置的ConcurrencyLimiter可以在HTTP入口配置并发和排队策略；本例展示如何用SemaphoreSlim直接保护指定代码段。[官方限流说明](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit)
-
+```C#
+lock (_gate)
+{
+    await RefreshStockAsync(sku);
+}
+```

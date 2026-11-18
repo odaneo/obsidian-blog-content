@@ -29,8 +29,6 @@ ASP.NET Core通常为每个HTTP请求管理一个作用域。所以Scoped服务�
 
 Singleton常用于需要全局共享的服务，Scoped常用于一次请求的工作，Transient则适合每次获取都需要独立实例的服务。单例可能同时被多个请求访问，需要考虑线程安全。
 
-Transient只规定创建方式，不表示“方法结束，容器马上调用Dispose”。[Microsoft：服务生命周期](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection/service-lifetimes)
-
 ## 二、谁调用Dispose
 
 对于容器创建并管理的可释放服务，可以这样区分：
@@ -95,10 +93,6 @@ ReportService.Dispose已执行
 2. 离开代码块时，`using`调用`scope.Dispose()`。
 3. DI作用域调用`report.Dispose()`。
 4. 当前程序作用域结束时，外层`using var`调用`provider.Dispose()`，释放根容器。
-
-示例中的`Dispose()`只打印信息。实际服务可以在这个方法中关闭自己拥有的流等资源。后台异步任务也应在作用域结束前完成资源使用。
-
-这里的`BuildServiceProvider()`用于独立演示。ASP.NET Core Web项目已有宿主创建的容器，通常直接使用它，不再额外构建一份。
 
 ## 四、注册方式也影响释放责任
 
