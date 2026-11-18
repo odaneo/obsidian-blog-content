@@ -1,15 +1,3 @@
----
-Id: "4b32f862ef71462ca8813d0bc9e81bd2"
-Description: 用查找成年用户的同一个例子，对比IQueryable让数据库筛选、IEnumerable让C#筛选的写法，解释数据在哪里处理，以及ToList什么时候执行查询。
-Slug: ef-core-ienumerable-vs-iqueryable
-TagRefs:
-  - "[[Tags/数据库|数据库]]"
-SubTags:
-  - "[[SubTags/EFCore|EFCore]]"
-Published: false
-Recommend: false
-MeechoPolished: true
----
 
 同样一段Where，既可能由数据库筛选，也可能由C#逐条判断。在EF Core查询中，IQueryable和IEnumerable的区别，首先体现在数据在哪里处理。
 

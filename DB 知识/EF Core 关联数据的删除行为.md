@@ -1,15 +1,3 @@
----
-Id: "f639a2218e52447a9cb05ff593d7751d"
-Description: 用部门和员工的例子，快速理解 Cascade、SetNull、Restrict 的删除结果，以及 SetNull 与 ClientSetNull 的区别。
-Slug: ef-core-relationship-delete-behaviors
-TagRefs:
-  - "[[Tags/数据库|数据库]]"
-SubTags:
-  - "[[SubTags/EFCore|EFCore]]"
-Published: false
-Recommend: false
-MeechoPolished: true
----
 
 删除部门时，部门里的员工是一起删除、解除关联，还是阻止操作？EF Core通过DeleteBehavior配置这种父子记录的处理方式。
 

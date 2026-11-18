@@ -1,16 +1,3 @@
----
-Id: "6d8446d513034eda8750f65d42f5c159"
-Description: 用商品查询和改价的例子，讲清Redis缓存穿透、击穿、雪崩与延迟双删，再梳理持久化、主从复制、Sentinel高可用和Cluster分片。
-Slug: redis-basics-and-cluster
-TagRefs:
-  - "[[Tags/数据库|数据库]]"
-SubTags:
-  - "[[SubTags/Redis|Redis]]"
-  - "[[SubTags/High Availability|High Availability]]"
-Published: false
-Recommend: false
-MeechoPolished: true
----
 
 商品页面频繁查询数据库，访问量升高后，数据库可能承受不住。把常查的商品信息放进Redis，页面就能先读取缓存，减少数据库访问。
 
