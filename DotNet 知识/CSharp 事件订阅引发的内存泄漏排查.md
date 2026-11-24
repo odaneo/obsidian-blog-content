@@ -45,9 +45,21 @@ public sealed class ImportProgress
 
 `TaskCompletionSource<int>`可以理解为“等待结果的通知器”：后台调用Report(80)，OnProgress就调用TrySetResult(80)，让等待中的接口返回80。
 
+`progress.Changed += OnProgress;` 这行代码是订阅事件，意思是：当 progress 的进度发生变化时，请调用我的 `OnProgress` 方法。
+
+通知链路是：
+
+```
+后台任务 Report(80)
+    → ImportProgress 触发 Changed 事件
+        → 调用每一个挂着的 OnProgress(80)
+            → next.TrySetResult(80)
+                → 正在 await 的那个 /progress 请求返回 80
+```
+
 业务完成了，问题却留下了：代码只有`+=`，没有对应的`-=`。
 
-## 请求返回了订阅还在
+## 请求返回了，订阅还在
 
 先用`dotnet run --urls http://127.0.0.1:5080`启动服务。
 
@@ -82,7 +94,7 @@ flowchart LR
 
 所以，HTTP请求结束并不等于这些对象失去了全部引用。只要单例还沿着事件列表引用它们，GC就不会回收。[Microsoft：事件订阅与取消](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/events/how-to-subscribe-to-and-unsubscribe-from-events)
 
-## 第一种修复是在finally里退订
+## 第一种修复：在finally里退订
 
 保留前面的订阅，把接口最后一行等待改成：
 
@@ -101,7 +113,7 @@ finally
 
 这是最直接的修复，适合订阅逻辑只在这一个地方使用的情况。
 
-## 第二种修复是实现IDisposable
+## 第二种修复：实现IDisposable
 
 如果多个接口需要同样的订阅逻辑，可以把“订阅、等待、退订”放进一个类：
 
