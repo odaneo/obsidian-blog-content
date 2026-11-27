@@ -1,5 +1,5 @@
 ---
-Id: "3cd568dc2c6f918a9d3bfa47ed54d629"
+Id: 3cd568dc2c6f918a9d3bfa47ed54d629
 Description: 多模型接进来之后，路由、鉴权、审核和账目各自该放在哪里。以C#原生组件为例，讲清动态路由与国别分流、流式内容审核、配额预扣和可观测怎么做，以及几处绕不开的取舍。
 Slug: ai-gateway-design
 TagRefs:
@@ -7,7 +7,7 @@ TagRefs:
   - "[[Tags/后端|后端]]"
 SubTags:
   - "[[SubTags/Architecture|Architecture]]"
-Published: false
+Published: true
 Recommend: false
 MeechoPolished: true
 ---
